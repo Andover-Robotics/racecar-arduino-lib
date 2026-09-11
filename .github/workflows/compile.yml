@@ -1,0 +1,29 @@
+name: Compile
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Arduino AVR core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr@1.8.8
+
+      - name: Compile examples
+        run: |
+          while IFS= read -r -d '' example; do
+            arduino-cli compile --fqbn arduino:avr:uno --library . "$example"
+          done < <(find examples -mindepth 1 -maxdepth 1 -type d -print0)
