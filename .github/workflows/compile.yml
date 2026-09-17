@@ -23,7 +23,18 @@ jobs:
           arduino-cli core install arduino:avr@1.8.8
 
       - name: Install library dependencies
-        run: arduino-cli lib install "Adafruit BNO055" "Encoder"
+        run: |
+          dependency_list="$(sed -n 's/^depends=//p' library.properties)"
+          if [[ -n "$dependency_list" ]]; then
+            IFS=',' read -ra dependencies <<< "$dependency_list"
+            for index in "${!dependencies[@]}"; do
+              dependency="${dependencies[$index]}"
+              dependency="${dependency#"${dependency%%[![:space:]]*}"}"
+              dependency="${dependency%"${dependency##*[![:space:]]}"}"
+              dependencies[$index]="$dependency"
+            done
+            arduino-cli lib install "${dependencies[@]}"
+          fi
 
       - name: Compile examples
         run: |
