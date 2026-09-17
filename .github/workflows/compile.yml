@@ -23,7 +23,7 @@ jobs:
           arduino-cli core install arduino:avr@1.8.8
 
       - name: Install library dependencies
-        run: arduino-cli lib install "Adafruit BNO055"
+        run: arduino-cli lib install "Adafruit BNO055" "Encoder"
 
       - name: Compile examples
         run: |
