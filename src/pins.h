@@ -4,6 +4,8 @@
 
 namespace Pins {
 constexpr uint8_t BNO055_I2C_ADDRESS = 0x28;
+constexpr uint8_t LEFT_ANALOG_REFLECTIVITY_PIN = A0;
+constexpr uint8_t RIGHT_ANALOG_REFLECTIVITY_PIN = A1;
 constexpr uint8_t LEFT_QUADRATURE_ENCODER_CHANNEL_A_PIN = 4;
 constexpr uint8_t LEFT_QUADRATURE_ENCODER_CHANNEL_B_PIN = 5;
 constexpr uint8_t RIGHT_QUADRATURE_ENCODER_CHANNEL_A_PIN = 6;
