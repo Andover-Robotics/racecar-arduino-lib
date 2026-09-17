@@ -22,6 +22,20 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install arduino:avr@1.8.8
 
+      - name: Install library dependencies
+        run: |
+          dependency_list="$(sed -n 's/^depends=//p' library.properties)"
+          if [[ -n "$dependency_list" ]]; then
+            IFS=',' read -ra dependencies <<< "$dependency_list"
+            for index in "${!dependencies[@]}"; do
+              dependency="${dependencies[$index]}"
+              dependency="${dependency#"${dependency%%[![:space:]]*}"}"
+              dependency="${dependency%"${dependency##*[![:space:]]}"}"
+              dependencies[$index]="$dependency"
+            done
+            arduino-cli lib install "${dependencies[@]}"
+          fi
+
       - name: Compile examples
         run: |
           while IFS= read -r -d '' example; do
